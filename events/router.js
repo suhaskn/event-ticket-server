@@ -1,9 +1,10 @@
 const { Router } = require('express')
 const Event = require('./model')
+const auth = require('../auth/middleware')
 
 const router = new Router()
 
-router.post('/events', (req, res, next) => {
+router.post('/events', auth, (req, res, next) => {
   const event = {
     name: req.body.name,
     description: req.body.description,
@@ -16,7 +17,9 @@ router.post('/events', (req, res, next) => {
     .then(eventList => {
       return res.send(eventList)
     })
+    .catch(err=>console.log('error',err))
 })
+
 
 router.get('/events', async(req,res) => {
   const limit = req.query.limit || 9
